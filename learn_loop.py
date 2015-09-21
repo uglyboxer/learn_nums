@@ -8,15 +8,14 @@ def learn_loop(dataset, answers, target):		### Just the digits from main dataset
 	returns proper weights for each element of the vector space
 	"""
 
-
 	# set initial guess, initial weights, threshold, and learning rate
 	binary_dataset = convert_dataset(dataset)
 	[vector.append(1) for vector in binary_dataset]
-	expected = [1 if answers[idx] == target else 0 for idx, x in enumerate(binary_dataset)] 	### This trains (target)
+	expected = [1 if answers[idx] == target else 0 for idx, x in enumerate(binary_dataset)] 
 	weights = [0 for elem in binary_dataset[0]]
 	guesses = [0 for vector in binary_dataset]
 	threshold = .5
-	l_rate = .1
+	l_rate = .05 
 
 	### Check each vector against expect and loop over again until 0 errors
 	counter = 0
@@ -28,7 +27,7 @@ def learn_loop(dataset, answers, target):		### Just the digits from main dataset
 			else:
 				guesses[idy] = 0
 			weights = update_weights(weights, error, l_rate, vector)
-		if expected != guesses and counter < 1000:
+		if expected != guesses and counter < 500:
 			counter += 1
 			continue
 		else:

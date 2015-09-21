@@ -11,15 +11,15 @@ Outputs guesses against new data
 
 digits = datasets.load_digits()
 answers = digits.target
-sliced_digits = digits.data[:1000]
+sliced_digits = digits.data[:1500]
 weight_set_of = [learn_loop(sliced_digits, answers, x) for x in range(10)]		#gets back weights
 successes = 0
-for temp in range(1001, len(digits.data)):
+for temp in range(1501, len(digits.data)):
 	guess = check_new(digits.data[temp], weight_set_of)
 	actual = digits.target[temp]
 	print("Computer's guess: {}  Actual #: {}".format(guess, actual))
 	if guess == actual:
 		successes += 1
-print("Computer was right {} times out of {}".format(successes, len(digits.data)-1000))
-print("For a correct percentage of {}%".format(successes/(len(digits.data)-1000)))
+print("Computer was right {} times out of {}".format(successes, len(digits.data)-1500))
+print("For a correct percentage of {}%".format(successes/(len(digits.data)-1500)))
 
