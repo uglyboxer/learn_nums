@@ -13,4 +13,5 @@ digits = datasets.load_digits()
 answers = digits.target
 sliced_digits = digits.data[:1000]
 weight_set_of = [learn_loop(sliced_digits, answers, x) for x in range(10)]		#gets back weights
-print(check_new(digits.data[1004], weight_set_of))
+temp = 1004
+print("Computer's guess: ", check_new(digits.data[temp], weight_set_of), " Actual #: ", digits.target[temp])

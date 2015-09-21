@@ -28,7 +28,7 @@ def learn_loop(dataset, answers, target):		### Just the digits from main dataset
 			else:
 				guesses[idy] = 0
 			weights = update_weights(weights, error, l_rate, vector)
-		if expected != guesses and counter < 100:
+		if expected != guesses and counter < 1000:
 			counter += 1
 			continue
 		else:
