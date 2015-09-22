@@ -16,9 +16,3 @@ def check_new(vector, weights):
 	else:
 		return None
 
-
-
-
-
-
-
