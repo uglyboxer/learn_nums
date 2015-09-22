@@ -10,12 +10,12 @@ def learn_loop(dataset, answers, target):		### Just the digits from main dataset
 
 	# set initial guess, initial weights, threshold, and learning rate
 	binary_dataset = convert_dataset(dataset)
-	[vector.append(1) for vector in binary_dataset]
+	[vector.append(1) for vector in binary_dataset] 
 	expected = [1 if answers[idx] == target else 0 for idx, x in enumerate(binary_dataset)] 
-	weights = [0 for elem in binary_dataset[0]]
+	weights = [0 for elem in binary_dataset[0]]  
 	guesses = [0 for vector in binary_dataset]
 	threshold = .5
-	l_rate = .05 
+	l_rate = .05
 
 	### Check each vector against expect and loop over again until 0 errors
 	counter = 0
