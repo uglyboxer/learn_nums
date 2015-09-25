@@ -10,7 +10,13 @@
 # Usage: python learn_nums.py
 #
 # Dataset: Written to work on the handwritten digits from scikit-learn
-# but datasets can be adjusted in main() below.
+# but datasets can be adjusted in train_and_test() below.
+#
+# Percptron settings can be adjusted as follows:
+#   Learning rate: in Neuron.update_weights() change l_rate
+#   Overfitting stop: Change the 'counter' conditional in train_neuron() 
+
+
 
 from sklearn import datasets
 
@@ -55,7 +61,12 @@ class Neuron:
 
     def fires(self, vector):
         """ Takes an input vector and decides if neuron fires or not 
-        Returns True or False
+        
+        Args:
+            vector - a list 
+
+        Returns:
+            a boolean
         """
         if dot_product(vector, self.receptors) > .5:
             return True
@@ -88,8 +99,6 @@ def train_neuron(neuron, vectors, answers):
     Returns:
         None
     """  
-
-    # ???? is this correct 
     expected = [1 if answers[idx] == neuron.target else 0 for idx, x in 
                 enumerate(vectors)] 
     counter = 0
@@ -101,11 +110,10 @@ def train_neuron(neuron, vectors, answers):
             else:
                 neuron.guess[idx] = 0
             neuron.update_weights(error, vector)
-        if expected != neuron.guess and counter < 500:
+        if expected != neuron.guess and counter < 500: #To prevent overfitting
             counter += 1
             continue
         else:
-            print("Got it, or good enough.")
             break
     return None
 
@@ -201,4 +209,6 @@ if __name__ == '__main__':
     ### Finish these tests, somehow
     #assert train_neuron(????) == ????
     train_and_test()
+
+__author__ = 'Cole Howard'
 
