@@ -16,9 +16,21 @@
 #   Learning rate: in Neuron.update_weights() change l_rate
 #   Overfitting stop: Change the 'counter' conditional in train_neuron() 
 
-
+from math import e 
 
 from sklearn import datasets
+
+
+class Vector:
+    """ Model of input set """
+
+    def __init__(self, length):
+        """ A list of determined length 
+
+        Args:
+            length (int)
+        """
+        self.length = length
 
 
 class Neuron:
@@ -53,9 +65,9 @@ class Neuron:
         Returns:
             None
         """
-        l_rate = .05
+        l_rate = .1
         for idx, item in enumerate(vector):
-            self.receptors[idx] += (item * l_rate * error)
+            self.receptors[idx] += (l_rate * error)  #### Took out -1* just for testing
         return self.receptors
 
 
@@ -68,10 +80,11 @@ class Neuron:
         Returns:
             a boolean
         """
-        if dot_product(vector, self.receptors) > .5:
-            return True
+        sigmoid = activation(vector, self.receptors)
+        if sigmoid > .5:
+            return True, sigmoid
         else:
-            return False
+            return False, sigmoid
 
 
 def append_bias(vector):
@@ -104,11 +117,22 @@ def train_neuron(neuron, vectors, answers):
     counter = 0
     while True:
         for idx, vector in enumerate(vectors):
-            error = expected[idx] - neuron.guess[idx]
-            if neuron.fires(vector):  
+            fired, sigmoid = neuron.fires(vector)    # Activation resul
+            if fired:  
                 neuron.guess[idx] = 1
             else:
                 neuron.guess[idx] = 0
+        ### Here is where you calculate the error to feed into weights
+        ### y is the activation
+        ### target is 1 or 0
+        ### weight += -1(l_rate)(gradient)
+        ### Then let T be the vector of target values, Y be the current output
+        ### vector, and msq be the error function. You will need to 
+        ### backpropagate the derivative d/dy msq(T, Y), for each y in Y
+        ### which should == y(1-y) y = sigmoid (s)
+            err = expected[idx] - neuron.guess[idx]
+            error = sigmoid * (sigmoid-1) * err
+            print(error) 
             neuron.update_weights(error, vector)
         if expected != neuron.guess and counter < 500: #To prevent overfitting
             counter += 1
@@ -118,8 +142,8 @@ def train_neuron(neuron, vectors, answers):
     return None
 
 
-def dot_product(vector, weights):
-    """ Returns the dot product of two equal length vectors
+def activation(vector, weights):
+    """ Activation function on two equal length vectors
 
     Args:
         vector (list)
@@ -128,7 +152,9 @@ def dot_product(vector, weights):
     Returns:
         a float
     """
-    return sum(elem * weight for elem, weight in zip(vector, weights))
+
+    s = sum(elem * weight for elem, weight in zip(vector, weights))
+    return (1/(1 + e**(-s)))
 
 
 def computer_guess(vector, neurons):
@@ -143,9 +169,8 @@ def computer_guess(vector, neurons):
         guess - an int
         or, None
     """
-    guesses = [(dot_product(vector, neurons[x].receptors), x) 
+    guesses = [(activation(vector, neurons[x].receptors), x) 
         for x in range(len(neurons)) if neurons[x].fires(vector)]
-    print(guesses)
     guesses.sort(reverse=True)
     try:
         return guesses[0][1]
@@ -199,10 +224,10 @@ def train_and_test():
 if __name__ == '__main__':
     assert append_bias([3, 4, 5, 6]) == [3, 4, 5, 6, 1]
     assert append_bias([]) == [1]
-    assert dot_product([4, 3, 2], [2, 3, 4]) == 25
+    # assert activation([4, 3, 2], [2, 3, 4]) == 25
     dummy = Neuron(2,2,2)
-    assert dummy.fires([6, 3]) == False
-    assert [int(x) for x in dummy.update_weights(100, [6, 3])] == [30, 15]
+    # assert dummy.fires([6, 3]) == False
+    # assert [int(x) for x in dummy.update_weights(100, [6, 3])] == [30, 15]
     print("Tests pass.  Initiate happy dance.")
 
 
